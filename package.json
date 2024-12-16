@@ -6,7 +6,15 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:e2e": "cypress open",
+    "test:headless": "ng test --watch=false --browsers ChromeHeadless",
+    "lint": "npx eslint \"src/**/*.{js,jsx,ts,tsx,html}\" --quiet",
+    "lint:fix": "npx eslint \"src/**/*.{js,jsx,ts,tsx,html}\" --quiet --fix",
+    "lint:staged": "npx lint-staged",
+    "stylelint": "stylelint \"src/**/*.{css,pcss,less,scss,sass}\" --quiet-deprecation-warnings",
+    "stylelint:fix": "stylelint src/**/*.{css,pcss,less,scss,sass} --quiet-deprecation-warnings --fix",
+    "format": "prettier --write ."
   },
   "private": true,
   "dependencies": {
@@ -27,12 +35,23 @@
     "@angular/cli": "^18.2.12",
     "@angular/compiler-cli": "^18.2.0",
     "@types/jasmine": "~5.1.0",
+    "angular-eslint": "18.4.3",
+    "eslint": "^9.15.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.7.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-unused-imports": "^4.1.4",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.5.2"
+    "prettier": "^3.4.2",
+    "stylelint": "^16.11.0",
+    "stylelint-config-standard-scss": "^14.0.0",
+    "typescript": "~5.5.2",
+    "typescript-eslint": "8.16.0"
   }
 }
