@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "jest --no-cache",
     "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "test:ci": "jest --runInBand",
     "lint": "npx eslint \"src/**/*.{js,jsx,ts,tsx,html}\" --quiet",
     "lint:fix": "npx eslint \"src/**/*.{js,jsx,ts,tsx,html}\" --quiet --fix",
