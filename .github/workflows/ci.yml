@@ -1,0 +1,155 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - '[0-9]+.[0-9]+.x'
+  pull_request:
+    branches:
+      - main
+      - develop
+      - '[0-9]+.[0-9]+.x'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        id: setup-node
+        run: echo "NODE_VERSION=$(cat .node-version)" >> $GITHUB_ENV
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install node modules
+        run: npm install --frozen-lockfile
+
+      - name: Run linter
+        run: npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        id: setup-node
+        run: echo "NODE_VERSION=$(cat .node-version)" >> $GITHUB_ENV
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install node modules
+        run: npm install --frozen-lockfile
+
+      - name: Run unit tests
+        run: npm test -- --watch=false --bail
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        id: setup-node
+        run: echo "NODE_VERSION=$(cat .node-version)" >> $GITHUB_ENV
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install node modules
+        run: npm install --frozen-lockfile
+
+      - name: Run E2E tests
+        run: npm run e2e -- --flaky_test_attempts=2
+
+  storybook:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        id: setup-node
+        run: echo "NODE_VERSION=$(cat .node-version)" >> $GITHUB_ENV
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install node modules
+        run: npm install --frozen-lockfile
+
+      - name: Build Storybook
+        run: npm run build:storybook
+
+      - name: Run Storybook tests
+        run: npm run test:storybook
+
+  build:
+    runs-on: ubuntu-latest
+    needs: e2e
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        id: setup-node
+        run: echo "NODE_VERSION=$(cat .node-version)" >> $GITHUB_ENV
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install node modules
+        run: npm install --frozen-lockfile
+
+      - name: Build the application
+        run: npm run build -- --prod
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [storybook, build]
+    if: success() # This ensures that the deploy step only runs if all previous jobs succeeded
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        id: setup-node
+        run: echo "NODE_VERSION=$(cat .node-version)" >> $GITHUB_ENV
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install node modules
+        run: npm install --frozen-lockfile
+
+      - name: Deploy the application
+        run: |
+          # Replace the following command with your actual deployment command
+          npm run deploy
