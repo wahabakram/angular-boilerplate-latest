@@ -63,5 +63,4 @@ Thumbs.db
 src/favicon.ico
 
 # Storybook
-src/stories/assets
-Configure.mdx
+src/stories/

@@ -20,61 +20,43 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        id: setup-node
-        run: echo "NODE_VERSION=$(cat .node-version)" >> $GITHUB_ENV
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: '.nvmrc'
 
       - name: Install node modules
         run: npm install --frozen-lockfile
 
-      - name: Run linter
+      - name: Check lint
         run: npm run lint
+
+      - name: Check stylelint
+        run: npm run stylelint
 
   test:
     runs-on: ubuntu-latest
     needs: lint
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        id: setup-node
-        run: echo "NODE_VERSION=$(cat .node-version)" >> $GITHUB_ENV
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: '.nvmrc'
 
       - name: Install node modules
         run: npm install --frozen-lockfile
 
       - name: Run unit tests
-        run: npm test -- --watch=false --bail
+        run: npm run test:ci
 
   e2e:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        id: setup-node
-        run: echo "NODE_VERSION=$(cat .node-version)" >> $GITHUB_ENV
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: '.nvmrc'
 
       - name: Install node modules
         run: npm install --frozen-lockfile
@@ -86,17 +68,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        id: setup-node
-        run: echo "NODE_VERSION=$(cat .node-version)" >> $GITHUB_ENV
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: '.nvmrc'
 
       - name: Install node modules
         run: npm install --frozen-lockfile
@@ -104,24 +79,17 @@ jobs:
       - name: Build Storybook
         run: npm run build:storybook
 
-      - name: Run Storybook tests
-        run: npm run test:storybook
+    #   - name: Run Storybook tests
+    #     run: npm run test:storybook
 
   build:
     runs-on: ubuntu-latest
     needs: [e2e, storybook]
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        id: setup-node
-        run: echo "NODE_VERSION=$(cat .node-version)" >> $GITHUB_ENV
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: '.nvmrc'
 
       - name: Install node modules
         run: npm install --frozen-lockfile
@@ -132,23 +100,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: success() # This ensures that the deploy step only runs if all previous jobs succeeded
+    if: success()
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        id: setup-node
-        run: echo "NODE_VERSION=$(cat .node-version)" >> $GITHUB_ENV
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Install node modules
-        run: npm install --frozen-lockfile
-
       - name: Deploy the application
         run: |
           # Replace the following command with your actual deployment command

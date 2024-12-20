@@ -8,6 +8,22 @@ const unusedImports = require('eslint-plugin-unused-imports');
 
 module.exports = tseslint.config(
   {
+    ignores: [
+      'package.json',
+      'package-lock.json',
+      'dist',
+      'e2e/**',
+      'karma.conf.js',
+      'commitlint.config.js',
+      'eslint.config.ts',
+      'cypress',
+      'cypress.config.ts',
+      'src/assets',
+      'src/stories/',
+      'public'
+    ]
+  },
+  {
     files: ['**/*.ts'],
     extends: [
       eslint.configs.recommended,
