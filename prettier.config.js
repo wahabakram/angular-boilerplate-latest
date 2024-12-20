@@ -42,6 +42,12 @@ const config = {
       options: {
         parser: 'scss'
       }
+    },
+    {
+      files: ['src/**/*.css'],
+      options: {
+        parser: 'css'
+      }
     }
   ]
 };

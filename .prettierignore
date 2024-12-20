@@ -59,4 +59,9 @@ Thumbs.db
 .bashrc
 .zshrc
 .nvmrc
+.node-version
 src/favicon.ico
+
+# Storybook
+src/stories/assets
+Configure.mdx
