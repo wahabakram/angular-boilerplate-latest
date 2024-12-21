@@ -93,14 +93,6 @@ jobs:
         run: npx playwright test --only-changed=origin/$GITHUB_BASE_REF
         if: github.event_name == 'pull_request'
 
-      # Start the application in the background
-      - name: Start Application
-        run: npm run start & # or your specific start command
-
-      # Wait for the application to be available
-      - name: Wait for the application to be ready
-        run: npx wait-on http://0.0.0.0:4200
-
       - name: Run E2E (Playwright) tests
         run: npx playwright test
 
