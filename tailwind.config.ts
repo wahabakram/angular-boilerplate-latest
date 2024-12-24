@@ -14,7 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans]
+        serif: ['Lato', ...defaultTheme.fontFamily.serif]
       },
       colors: {
         primary: colors.emerald,
