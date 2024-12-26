@@ -6,6 +6,8 @@ const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommen
 const importPlugin = require('eslint-plugin-import');
 const unusedImports = require('eslint-plugin-unused-imports');
 
+const ngrx = require('@ngrx/eslint-plugin/v9');
+
 module.exports = tseslint.config(
   {
     ignores: [
@@ -36,7 +38,13 @@ module.exports = tseslint.config(
       importPlugin.flatConfigs?.recommended,
       importPlugin.flatConfigs?.typescript,
       importPlugin.flatConfigs?.warnings,
-      importPlugin.flatConfigs?.errors
+      importPlugin.flatConfigs?.errors,
+      // NgRx
+      ...ngrx.configs.store,
+      ...ngrx.configs.effects,
+      ...ngrx.configs.componentStore,
+      ...ngrx.configs.operators,
+      ...ngrx.configs.signals
     ],
     languageOptions: {
       parserOptions: {
@@ -236,7 +244,9 @@ module.exports = tseslint.config(
             match: false
           }
         }
-      ]
+      ],
+      // NgRx rules
+      '@ngrx/with-state-no-arrays-at-root-level': 'warn'
     }
   },
   {
