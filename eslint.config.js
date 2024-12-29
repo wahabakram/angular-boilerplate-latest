@@ -22,7 +22,8 @@ module.exports = tseslint.config(
       'cypress.config.ts',
       'src/assets',
       'src/stories/',
-      'public'
+      'public',
+      'src/environments'
     ]
   },
   {
@@ -150,7 +151,7 @@ module.exports = tseslint.config(
       '@angular-eslint/no-output-native': 'error',
       '@angular-eslint/no-inputs-metadata-property': 'error',
       '@angular-eslint/no-outputs-metadata-property': 'error',
-      '@angular-eslint/no-host-metadata-property': 'error',
+      '@angular-eslint/no-host-metadata-property': ['error', { allowStatic: true }],
       '@angular-eslint/no-output-rename': 'error',
       '@angular-eslint/use-lifecycle-interface': 'error',
       '@angular-eslint/use-pipe-transform-interface': 'error',
@@ -170,6 +171,7 @@ module.exports = tseslint.config(
       '@typescript-eslint/no-floating-promises': 'off',
       '@typescript-eslint/no-var-requires': 0,
       '@typescript-eslint/explicit-function-return-type': 'error',
+      '@typescript-eslint/no-extraneous-class': 'off',
       '@typescript-eslint/member-ordering': [
         'error',
         {
@@ -201,7 +203,7 @@ module.exports = tseslint.config(
         {
           selector: 'variable',
           modifiers: ['const'],
-          format: ['strictCamelCase', 'UPPER_CASE']
+          format: ['strictCamelCase', 'StrictPascalCase', 'UPPER_CASE']
         },
         {
           selector: 'variable',
